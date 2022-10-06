@@ -21,7 +21,7 @@ output: pdf_document
 
 ```{r setup, include=FALSE, results = 'asis'}
 knitr::opts_chunk$set(echo = FALSE)
-knitr::opts_chunk$set(fig.width=4, fig.height=3)
+knitr::opts_chunk$set(fig.width=4, fig.height=4)
 ```
 
 \huge
@@ -38,6 +38,7 @@ Hitter Efficiency Rating (H.E.R)
 ```{r echo=FALSE, results = 'asis'}
 library(knitr)
 library(kableExtra)
+library(assertive, warn.conflicts = FALSE)
 
 kable(params$her_table) %>%
   kable_styling(latex_options=c("scale_down", "hold_position"))
@@ -53,6 +54,7 @@ Quality of At Bat (Q.A.B)
 ```{r echo=FALSE, results = 'asis'}
 library(knitr)
 library(kableExtra)
+library(assertive, warn.conflicts = FALSE)
 
 kable(params$qab_table) %>%
   kable_styling(latex_options=c("scale_down", "hold_position"))
@@ -63,7 +65,32 @@ kable(params$qab_table) %>%
 include_graphics(paste(params$pwd,"qab.png", sep="/"))
 ```
 
+\small
+** See pages 2 and 3 for enlarged plots **\
+\
 ```{r, results = 'asis'}
 params$plot1
+params$plot2
+```
+
+\newpage
+\huge
+\begin{center}
+Pitch Locations by Pitch Category\
+\end{center}
+```{r include=FALSE, results = 'asis'}
+knitr::opts_chunk$set(fig.width=8, fig.height=6)
+```
+
+```{r, results = 'asis'}
+params$plot1
+```
+
+\newpage
+\huge
+\begin{center}
+Pitch Locations by Result\
+\end{center}
+```{r, results = 'asis'}
 params$plot2
 ```

@@ -1,6 +1,7 @@
 library(shiny)
 library(dplyr)
 library(ggplot2)
+library(assertive, warn.conflicts = FALSE)
 
 hitter_report = read.csv("www/hitter-report.csv", header = TRUE)
 
@@ -130,12 +131,21 @@ server <- function(input, output) {
     xlim(-4,4) +
     ylim(-2,6) +
     
-    # Add strikezone to plot
-    geom_segment(aes(x = -0.85, xend = -0.85, y = 1.5, yend = 3.6), color = "black") +
-    geom_segment(aes(x =  0.85, xend = 0.85,  y = 1.5, yend = 3.6), color = "black") +
-    geom_segment(aes(x = -0.85, xend = 0.85,  y = 1.5, yend = 1.5), color = "black") +
-    geom_segment(aes(x = -0.85, xend = 0.85,  y = 3.6, yend = 3.6), color = "black")
-
+    # Add Edge Zone (EZ) to plot
+    annotate("rect", xmin = -1, xmax =  1, ymin = 1.25, ymax = 3.85, color = "chartreuse3", fill="darkgreen", alpha=.2) +
+    
+    geom_segment(aes(x = -1.0, xend = -1.0, y =   -2, yend =    6), color = "black") +
+    geom_segment(aes(x =  1.0, xend =  1.0, y =   -2, yend =    6), color = "black") +
+    geom_segment(aes(x =   -4, xend =    4, y = 1.25, yend = 1.25), color = "black") +
+    geom_segment(aes(x =   -4, xend =    4, y =  3.85, yend = 3.85), color = "black") +
+      
+    # Add Damage Zone (DZ) to plot
+    annotate("rect", xmin = -0.6, xmax =  0.6, ymin = 1.75, ymax = 3.35, color = "darkred", fill="darkred", alpha=.2) +
+      
+    geom_segment(aes(x = -0.6, xend = -0.6, y =   -2, yend =    6), color = "black") +
+    geom_segment(aes(x =  0.6, xend =  0.6, y =   -2, yend =    6), color = "black") +
+    geom_segment(aes(x =   -4, xend =    4, y = 1.75, yend = 1.75), color = "black") +
+    geom_segment(aes(x =   -4, xend =   4, y =  3.35, yend = 3.35), color = "black")
   })
   
   pitch_result_plot <- reactive({
@@ -203,11 +213,21 @@ server <- function(input, output) {
     xlim(-4,4) +
     ylim(-2,6) +
     
-    # Add strikezone to plot
-    geom_segment(aes(x = -0.85, xend = -0.85, y = 1.5, yend = 3.6), color = "black") +
-    geom_segment(aes(x =  0.85, xend = 0.85,  y = 1.5, yend = 3.6), color = "black") +
-    geom_segment(aes(x = -0.85, xend = 0.85,  y = 1.5, yend = 1.5), color = "black") +
-    geom_segment(aes(x = -0.85, xend = 0.85,  y = 3.6, yend = 3.6), color = "black")
+    # Add Edge Zone (EZ) to plot
+    annotate("rect", xmin = -1, xmax =  1, ymin = 1.25, ymax = 3.85, color = "chartreuse3", fill="darkgreen", alpha=.2) +
+    
+    geom_segment(aes(x = -1.0, xend = -1.0, y =   -2, yend =    6), color = "black") +
+    geom_segment(aes(x =  1.0, xend =  1.0, y =   -2, yend =    6), color = "black") +
+    geom_segment(aes(x =   -4, xend =    4, y = 1.25, yend = 1.25), color = "black") +
+    geom_segment(aes(x =   -4, xend =    4, y =  3.85, yend = 3.85), color = "black") +
+    
+    # Add Damage Zone (DZ) to plot
+    annotate("rect", xmin = -0.6, xmax =  0.6, ymin = 1.75, ymax = 3.35, color = "darkred", fill="darkred", alpha=.2) +
+    
+    geom_segment(aes(x = -0.6, xend = -0.6, y =   -2, yend =    6), color = "black") +
+    geom_segment(aes(x =  0.6, xend =  0.6, y =   -2, yend =    6), color = "black") +
+    geom_segment(aes(x =   -4, xend =    4, y = 1.75, yend = 1.75), color = "black") +
+    geom_segment(aes(x =   -4, xend =   4, y =  3.35, yend = 3.35), color = "black")
     
   })
   
