@@ -76,7 +76,7 @@ params$plot2
 \newpage
 \huge
 \begin{center}
-Pitch Locations by Pitch Category\
+Pitch Locations by Pitch Category
 \end{center}
 ```{r include=FALSE, results = 'asis'}
 knitr::opts_chunk$set(fig.width=8, fig.height=6)
@@ -89,7 +89,7 @@ params$plot1
 \newpage
 \huge
 \begin{center}
-Pitch Locations by Result\
+Pitch Locations by Result
 \end{center}
 ```{r, results = 'asis'}
 params$plot2

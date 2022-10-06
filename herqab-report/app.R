@@ -9,6 +9,7 @@ ui <- fluidPage(
   navbarPage(
     "Maryland Baseball Hitting 2021-2022",
     tabPanel("Team & Individual H.E.R & Q.A.B Report",
+      fileInput("file", "Choose CSV File", accept = ".csv"),
       fluidRow(
         column(width = 12,
                "Hitter Efficiency Rating (H.E.R)",
@@ -31,24 +32,23 @@ ui <- fluidPage(
        wellPanel(
          fluidRow(
            column(width = 2, align = "left",
-                  selectInput("GameType", label = "Game Type:", choices = append("All", as.list(hitter_report$GameType))),
-                  selectInput("PitcherThrows", label = "LHP vs. RHP:", choices = append("All", as.list(hitter_report$PitcherThrows)))
+                  selectInput("GameType", label = "Game Type:", choices = "No choices yet"),
+                  selectInput("PitcherThrows", label = "LHP vs. RHP:", choices = "No choices yet")
            ),
            column(width = 2, align = "left",
-                  selectInput("Opponent", label = "Opponent:", choices = append("All", as.list(hitter_report$PitcherTeam))),
-                  selectInput("pitch_category", label = "Pitch Category:", choices = append("All", as.list(hitter_report$pitch_category)))
+                  selectInput("Opponent", label = "Opponent:", choices = "No choices yet"),
+                  selectInput("pitch_category", label = "Pitch Category:", choices = "No choices yet")
            ),
            column(width = 2, align = "left",
-                  selectInput("Date", label = "Date:", choices = append("All", as.list(hitter_report$Date))),
-                  selectInput("count_type", label = "Count Type:", choices = append("All", as.list(hitter_report$count_type)))
+                  selectInput("Date", label = "Date:", choices = "No choices yet"),
+                  selectInput("count_type", label = "Count Type:", choices = "No choices yet")
            ),
            column(width = 2, align = "center",
-                  selectInput("playerID", label = "Batter Name:", choices = append("All", as.list(hitter_report$Batter))),
-                  selectInput("GameID", label = "GameID:", choices = append("All", as.list(unique(hitter_report$GameID))))
+                  selectInput("playerID", label = "Batter Name:", choices = "No choices yet"),
+                  selectInput("GameID", label = "GameID:", choices = "No choices yet")
            ),
            column(width = 5, align = "center",
-                  sliderInput("pitchVelo", label = "Pitch Velocity:", min = min(unlist(hitter_report$RelSpeed), na.rm = TRUE),
-                              max = max(unlist(hitter_report$RelSpeed), na.rm = TRUE), value = c(min(unlist(hitter_report$RelSpeed), na.rm = TRUE), max(unlist(hitter_report$RelSpeed), na.rm = TRUE))),
+                  sliderInput("pitchVelo", label = "Pitch Velocity:", min = 50, max = 105, value = c(50,105)),
                   downloadButton("report", "Generate report")
            )
          )
@@ -57,7 +57,28 @@ ui <- fluidPage(
   )
 )
 
-server <- function(input, output) {
+server <- function(input, output, session) {
+  observeEvent(input$file, {
+    
+    hitter_report <- read.csv(input$file$datapath, header = TRUE)
+    
+    updateSelectInput(session, "GameType", label = "Game Type:", choices = append("All", as.list(hitter_report$GameType)))
+    updateSelectInput(session, "PitcherThrows", label = "LHP vs. RHP:", choices = append("All", as.list(hitter_report$PitcherThrows)))
+    updateSelectInput(session, "Opponent", label = "Opponent:", choices = append("All", as.list(hitter_report$PitcherTeam)))
+    updateSelectInput(session, "pitch_category", label = "Pitch Category:", choices = append("All", as.list(hitter_report$pitch_category)))
+    updateSelectInput(session, "Date", label = "Date:", choices = append("All", as.list(hitter_report$Date)))
+    
+    updateSelectInput(session, "count_type", label = "Count Type:", choices = append("All", as.list(hitter_report$count_type)))
+    updateSelectInput(session, "playerID", label = "Batter:", choices = append("All", as.list(hitter_report$Batter)))
+    updateSelectInput(session, "GameID", label = "GameID:", choices = append("All", as.list(unique(hitter_report$GameID))))
+    
+    updateSelectInput(session, "pitch_category", label = "Pitch Category:", choices = append("All", as.list(hitter_report$pitch_category)))
+    updateSliderInput(session, "pitchVelo", label = "Pitch Velocity:",  min = min(unlist(hitter_report$RelSpeed), na.rm = TRUE),
+                                                                        max = max(unlist(hitter_report$RelSpeed), na.rm = TRUE),
+                                                                        value = c(min(unlist(hitter_report$RelSpeed), na.rm = TRUE), max(unlist(hitter_report$RelSpeed), na.rm = TRUE)))
+    
+  })
+  
   output$pitch_category_plot <- renderPlot({
     p <- pitch_category_plot()
     print(p)
@@ -362,10 +383,12 @@ server <- function(input, output) {
   })
   
   output$report <- downloadHandler(
-    if (input$playerID == "All") {
-      filename = paste("Team-HER-QAB-Report", ".pdf", sep = "")
-    } else {
-      filename = paste("Individual-HER-QAB-Report-", input$playerID, ".pdf", sep = "")
+    filename = function(){
+      if (input$playerID == "All") {
+        filename = paste("Team-HER-QAB-Report", ".pdf", sep = "")
+      } else {
+        filename = paste("Individual-HER-QAB-Report-", input$playerID, ".pdf", sep = "")
+      }
     },
     
     content = function(file) {
