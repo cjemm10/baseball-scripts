@@ -1,0 +1,69 @@
+---
+title: "Team & Individual H.E.R & Q.A.B Report"
+params:
+  Date: NA
+  GameType: NA
+  PitcherThrows: NA
+  Opponent: NA
+  pitch_category: NA
+  count_type: NA
+  playerID: NA
+  GameID: NA
+  pitchVelo: NA
+  plot1: NA
+  plot2: NA
+  her_table: NA
+  qab_table: NA
+  pwd: NA
+geometry: "left=1cm,right=1cm,top=1cm,bottom=1cm"
+output: pdf_document
+---
+
+```{r setup, include=FALSE, results = 'asis'}
+knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(fig.width=4, fig.height=3)
+```
+
+\huge
+```{r, results = 'asis'}
+if (params$playerID == "All") {
+  cat("All Batters")
+} else {
+  cat(params$playerID)
+}
+```
+
+\huge
+Hitter Efficiency Rating (H.E.R)
+```{r echo=FALSE, results = 'asis'}
+library(knitr)
+library(kableExtra)
+
+kable(params$her_table) %>%
+  kable_styling(latex_options=c("scale_down", "hold_position"))
+
+```
+
+```{r echo=FALSE, results = 'asis', out.width = "570px"}
+include_graphics(paste(params$pwd,"her-image.png", sep="/"))
+```
+
+\huge
+Quality of At Bat (Q.A.B)
+```{r echo=FALSE, results = 'asis'}
+library(knitr)
+library(kableExtra)
+
+kable(params$qab_table) %>%
+  kable_styling(latex_options=c("scale_down", "hold_position"))
+
+```
+
+```{r echo=FALSE, results = 'asis', out.width = "570px"}
+include_graphics(paste(params$pwd,"qab.png", sep="/"))
+```
+
+```{r, results = 'asis'}
+params$plot1
+params$plot2
+```
