@@ -4,5 +4,5 @@ Fangraphs Scraper - Script that stores batter and pitcher data from 2010 -presen
 
 MLB API - Still working on.
 
-H.E.R & Q.A.B Report - Hitter Efficiency Rating and Quality At Bat Report Generator. Given data, provides a report for each hitter and details how well their at bats went. This is done through the use of the R Shiny package. Details include calculations as well as strikezone plots of each pitch based on pitch type (fastball, offspeed, breaking) and result (out, rbi, runner moved, single, double, etc...). 
+**H.E.R & Q.A.B Report** - Hitter Efficiency Rating and Quality At Bat Report Generator. Given data, provides a report for each hitter and details how well their at bats went. This is done through the use of the R Shiny package. Details include calculations as well as strikezone plots of each pitch based on pitch type (fastball, offspeed, breaking) and result (out, rbi, runner moved, single, double, etc...). 
       See example usage here: https://cjemm10.shinyapps.io/HER-QAB/
